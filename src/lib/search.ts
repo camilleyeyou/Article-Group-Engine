@@ -16,7 +16,7 @@ export async function searchAssets(
 ): Promise<SearchResult[]> {
   const supabase = createServerClient();
   const limit = options?.limit ?? 10;
-  const minSimilarity = options?.minSimilarity ?? 0.5;
+  const minSimilarity = options?.minSimilarity ?? 0.2;
   
   // Generate embedding for the query
   const queryEmbedding = await generateEmbedding(query);
@@ -107,20 +107,35 @@ export async function searchWithPinning(
   const pinned = await getPinnedAssets(query);
   const pinnedIds = new Set(pinned.map(a => a.id));
   
+  console.log(`[Search] Query: "${query}"`);
+  console.log(`[Search] Pinned assets: ${pinned.length}`);
+  
   // Search for remaining assets
   const searchLimit = Math.max(1, limit - pinned.length);
-  const searched = await searchAssets(query, {
-    ...options,
-    limit: searchLimit + pinned.length, // Get extras to filter out pinned
-  });
   
-  // Filter out any pinned assets from search results
-  const filteredSearched = searched.filter(r => !pinnedIds.has(r.asset.id));
-  
-  return {
-    pinned,
-    searched: filteredSearched.slice(0, searchLimit),
-  };
+  try {
+    const searched = await searchAssets(query, {
+      ...options,
+      limit: searchLimit + pinned.length, // Get extras to filter out pinned
+    });
+    
+    console.log(`[Search] Vector search results: ${searched.length}`);
+    
+    // Filter out any pinned assets from search results
+    const filteredSearched = searched.filter(r => !pinnedIds.has(r.asset.id));
+    
+    return {
+      pinned,
+      searched: filteredSearched.slice(0, searchLimit),
+    };
+  } catch (error) {
+    console.error('[Search] Vector search failed:', error);
+    // Return empty search results but keep pinned
+    return {
+      pinned,
+      searched: [],
+    };
+  }
 }
 
 /*

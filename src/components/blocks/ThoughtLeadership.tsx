@@ -9,11 +9,14 @@ interface ThoughtLeadershipProps {
 }
 
 export function ThoughtLeadership({ asset }: ThoughtLeadershipProps) {
+  const href = asset.source_url || `/asset/${asset.id}`;
+  const isExternal = !!asset.source_url;
+  
   return (
     <motion.a
-      href={asset.source_url || '#'}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={href}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
