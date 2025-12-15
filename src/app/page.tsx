@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { QueryInput } from '@/components/input/QueryInput';
 import { StarterPrompts } from '@/components/input/StarterPrompts';
 import { ThinkingState } from '@/components/loading/ThinkingState';
-import { ResponseRenderer } from '@/components/blocks/ResponseRenderer';
+import { TemplateRenderer } from '@/components/blocks/TemplateRenderer';
 import type { GeneratedResponse } from '@/types';
 import { ArrowLeft } from 'lucide-react';
 
@@ -148,27 +148,20 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="px-4 py-12"
             >
-              {/* Query recap */}
-              <div className="max-w-3xl mx-auto mb-8 text-center">
-                <p className="text-sm text-slate-500 mb-2">Your challenge:</p>
-                <p className="text-lg text-slate-700 font-medium">
-                  &quot;{currentQuery}&quot;
-                </p>
-              </div>
-
-              {/* Response */}
-              <ResponseRenderer 
-                layout={response.layout} 
-                assets={response.assets} 
+              {/* Template-specific page layout */}
+              <TemplateRenderer 
+                template={response.template}
+                narrative={response.narrative}
+                assets={response.assets}
+                layout={response.layout}
+                query={currentQuery}
               />
 
               {/* Footer info */}
-              <div className="max-w-3xl mx-auto mt-16 pt-8 border-t border-slate-200 text-center">
-                <p className="text-sm text-slate-500">
-                  Response generated in {response.latency_ms}ms • 
-                  Template: {response.template.name}
+              <div className="max-w-3xl mx-auto mt-8 pb-16 px-6 text-center">
+                <p className="text-sm text-slate-400">
+                  Response generated in {response.latency_ms}ms
                 </p>
               </div>
             </motion.div>
