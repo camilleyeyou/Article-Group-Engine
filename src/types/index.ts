@@ -1,5 +1,55 @@
 // Asset types
-export type AssetType = 'case_study' | 'video' | 'article' | 'deck' | 'diagram';
+export type AssetType = 'case_study' | 'video' | 'article' | 'deck' | 'diagram' | 'guide';
+
+// Business Capabilities
+export type BusinessCapability = 
+  // Foundational Strategy
+  | 'narrative-frameworks'
+  | 'positioning-messaging'
+  | 'gtm-strategy'
+  | 'journey-persona'
+  // Content & Engagement
+  | 'editorial-strategy'
+  | 'thought-leadership'
+  | 'copywriting'
+  | 'social-strategy'
+  // Visual & Design
+  | 'brand-design'
+  | 'design-systems'
+  | 'video-production'
+  // Sales Enablement & Events
+  | 'sales-collateral'
+  | 'keynote-events'
+  | 'partner-marketing';
+
+export const CAPABILITY_INFO: Record<BusinessCapability, { name: string; category: string }> = {
+  'narrative-frameworks': { name: 'Narrative Frameworks', category: 'Foundational Strategy' },
+  'positioning-messaging': { name: 'Positioning & Messaging', category: 'Foundational Strategy' },
+  'gtm-strategy': { name: 'GTM Strategy', category: 'Foundational Strategy' },
+  'journey-persona': { name: 'Journey Mapping & Personas', category: 'Foundational Strategy' },
+  'editorial-strategy': { name: 'Editorial Strategy', category: 'Content & Engagement' },
+  'thought-leadership': { name: 'Thought Leadership', category: 'Content & Engagement' },
+  'copywriting': { name: 'Copywriting & Scriptwriting', category: 'Content & Engagement' },
+  'social-strategy': { name: 'Social Strategy', category: 'Content & Engagement' },
+  'brand-design': { name: 'Brand Design', category: 'Visual & Design' },
+  'design-systems': { name: 'Design Systems', category: 'Visual & Design' },
+  'video-production': { name: 'Video Production', category: 'Visual & Design' },
+  'sales-collateral': { name: 'Sales Collateral', category: 'Sales Enablement & Events' },
+  'keynote-events': { name: 'Keynote & Event Strategy', category: 'Sales Enablement & Events' },
+  'partner-marketing': { name: 'Partner Marketing', category: 'Sales Enablement & Events' },
+};
+
+export interface AssetMetadata {
+  source_file?: string;
+  ingested_at?: string;
+  chunk_count?: number;
+  primary_capability?: BusinessCapability;
+  secondary_capabilities?: BusinessCapability[];
+  content_type?: AssetType;
+  is_case_study?: boolean;
+  quality_score?: number;
+  categorized_at?: string;
+}
 
 export interface Asset {
   id: string;
@@ -8,7 +58,7 @@ export interface Asset {
   client?: string;
   description?: string;
   content?: string;
-  metadata?: Record<string, unknown>;
+  metadata?: AssetMetadata;
   thumbnail_url?: string;
   source_url?: string;
   vimeo_id?: string;

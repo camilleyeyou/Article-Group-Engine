@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Building2, FileText, Calendar } from 'lucide-react';
-import type { Asset } from '@/types';
+import { ArrowLeft, Building2, FileText, Calendar, Tag } from 'lucide-react';
+import type { Asset, AssetMetadata, CAPABILITY_INFO } from '@/types';
 
 export default function AssetDetailPage() {
   const params = useParams();
@@ -17,9 +17,7 @@ export default function AssetDetailPage() {
     async function fetchAsset() {
       try {
         const response = await fetch(`/api/asset/${params.id}`);
-        if (!response.ok) {
-          throw new Error('Asset not found');
-        }
+        if (!response.ok) throw new Error('Asset not found');
         const data = await response.json();
         setAsset(data.asset);
       } catch (err) {
@@ -28,10 +26,7 @@ export default function AssetDetailPage() {
         setLoading(false);
       }
     }
-
-    if (params.id) {
-      fetchAsset();
-    }
+    if (params.id) fetchAsset();
   }, [params.id]);
 
   if (loading) {
@@ -57,18 +52,19 @@ export default function AssetDetailPage() {
     );
   }
 
-  const formattedDate = asset.created_at 
+  const metadata = asset.metadata as AssetMetadata | undefined;
+  const formattedDate = asset.created_at
     ? new Date(asset.created_at).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
       })
     : null;
 
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200">
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <button
             onClick={() => router.back()}
@@ -87,30 +83,48 @@ export default function AssetDetailPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {/* Meta info */}
-          <div className="flex flex-wrap gap-4 mb-6">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+          {/* Meta badges */}
+          <div className="flex flex-wrap gap-3 mb-6">
+            {/* Content type */}
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
               <FileText className="w-3.5 h-3.5" />
               {asset.type.replace('_', ' ')}
             </span>
-            
+
+            {/* Client */}
             {asset.client && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
                 <Building2 className="w-3.5 h-3.5" />
                 {asset.client}
               </span>
             )}
-            
+
+            {/* Capability */}
+            {metadata?.primary_capability && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-100 text-purple-700 rounded-full text-sm">
+                <Tag className="w-3.5 h-3.5" />
+                {metadata.primary_capability.replace(/-/g, ' ')}
+              </span>
+            )}
+
+            {/* Date */}
             {formattedDate && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-sm">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-full text-sm">
                 <Calendar className="w-3.5 h-3.5" />
                 {formattedDate}
+              </span>
+            )}
+
+            {/* Case study badge */}
+            {metadata?.is_case_study && (
+              <span className="inline-flex items-center px-3 py-1.5 bg-amber-100 text-amber-700 rounded-full text-sm font-medium">
+                ✦ Case Study
               </span>
             )}
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">
             {asset.title}
           </h1>
 
@@ -123,30 +137,33 @@ export default function AssetDetailPage() {
 
           {/* Content */}
           <div className="bg-white rounded-xl border border-slate-200 p-8 shadow-sm">
-            <div className="prose prose-slate max-w-none">
+            <div className="prose prose-slate max-w-none prose-headings:font-semibold prose-p:leading-relaxed">
               {asset.content ? (
-                asset.content.split('\n\n').map((paragraph, i) => (
-                  <p key={i} className="mb-4 text-slate-700 leading-relaxed">
-                    {paragraph}
-                  </p>
-                ))
+                asset.content.split('\n').map((paragraph, i) =>
+                  paragraph.trim() ? (
+                    <p key={i} className="mb-4 text-slate-700">
+                      {paragraph}
+                    </p>
+                  ) : (
+                    <br key={i} />
+                  )
+                )
               ) : (
                 <p className="text-slate-500 italic">No content available.</p>
               )}
             </div>
           </div>
 
-          {/* Source link if available */}
+          {/* Source link */}
           {asset.source_url && (
             <div className="mt-8">
               <a
                 href={asset.source_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700"
+                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
               >
-                View original source
-                <ArrowLeft className="w-4 h-4 rotate-180" />
+                View original source →
               </a>
             </div>
           )}
