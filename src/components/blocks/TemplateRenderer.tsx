@@ -7,7 +7,7 @@ import { CaseStudyCard } from './CaseStudyCard';
 import { CTABlock } from './CTABlock';
 import { 
   Mic2, Rocket, Code2, Users, Briefcase, Building2, 
-  Presentation, Target, Lightbulb, TrendingUp, Shield,
+  Presentation, Target, Lightbulb, TrendingUp,
   GitMerge, BarChart3, Heart, Handshake, BookOpen,
   AlertTriangle, Megaphone, Play
 } from 'lucide-react';

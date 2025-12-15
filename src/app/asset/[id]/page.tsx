@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Building2, FileText, Calendar, Tag } from 'lucide-react';
-import type { Asset, AssetMetadata, CAPABILITY_INFO } from '@/types';
+import type { Asset, AssetMetadata} from '@/types';
 
 export default function AssetDetailPage() {
   const params = useParams();
