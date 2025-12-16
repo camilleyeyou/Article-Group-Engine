@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { QueryInput } from '@/components/input/QueryInput';
 import { StarterPrompts } from '@/components/input/StarterPrompts';
 import { ThinkingState } from '@/components/loading/ThinkingState';
-import { TemplateRenderer } from '@/components/blocks/TemplateRenderer';
+import { TemplateRouter } from '@/components/templates';
 import type { GeneratedResponse } from '@/types';
 import { ArrowLeft } from 'lucide-react';
 
@@ -150,7 +150,7 @@ export default function Home() {
               exit={{ opacity: 0 }}
             >
               {/* Template-specific page layout */}
-              <TemplateRenderer 
+              <TemplateRouter 
                 template={response.template}
                 narrative={response.narrative}
                 assets={response.assets}
