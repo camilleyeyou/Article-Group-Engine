@@ -80,10 +80,10 @@ export function DevRelTemplate({ query, narrative, assets }: DevRelTemplateProps
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 text-emerald-500 text-lg">/**</div>
+              <div className="flex-shrink-0 text-emerald-500 text-lg">{`/**`}</div>
               <div>
                 <p className="text-lg md:text-xl text-gray-300 leading-relaxed font-sans">{narrative}</p>
-                <div className="text-emerald-500 mt-4">*/</div>
+                <div className="text-emerald-500 mt-4">{`*/`}</div>
               </div>
             </div>
           </motion.div>
