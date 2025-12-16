@@ -601,7 +601,7 @@ export default function AssetDetailPage() {
   }
 
   const metadata = asset.metadata as AssetMetadata | undefined;
-  const capability = metadata?.primary_capability || '';
+  const capability = (metadata?.primary_capability as string) || '';
   const wordCount = asset.content?.split(/\s+/).length || 0;
   const readTime = Math.max(1, Math.ceil(wordCount / 200));
   const paragraphs = asset.content?.split(/\n\n+/).filter(p => p.trim()) || [];
