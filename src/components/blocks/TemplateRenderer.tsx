@@ -1,13 +1,13 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import type { Template, Asset, LayoutBlock } from '@/types';
+import type { Template, Asset } from '@/types';
 import { StrategicBridge } from './StrategicBridge';
 import { CaseStudyCard } from './CaseStudyCard';
 import { CTABlock } from './CTABlock';
 import { 
   Mic2, Rocket, Code2, Users, Briefcase, Building2, 
-  Presentation, Target, Lightbulb, TrendingUp, Shield,
+  Presentation, Target, Lightbulb, TrendingUp,
   GitMerge, BarChart3, Heart, Handshake, BookOpen,
   AlertTriangle, Megaphone, Play
 } from 'lucide-react';
@@ -16,7 +16,6 @@ interface TemplateRendererProps {
   template: Template;
   narrative: string;
   assets: Asset[];
-  layout: LayoutBlock[];
   query: string;
 }
 
@@ -70,7 +69,7 @@ const TEMPLATE_THEMES: Record<string, { gradient: string; accent: string; light:
   'general': { gradient: 'from-slate-600 to-slate-800', accent: 'text-blue-400', light: 'bg-slate-50' },
 };
 
-export function TemplateRenderer({ template, narrative, assets, layout, query }: TemplateRendererProps) {
+export function TemplateRenderer({ template, narrative, assets, query }: TemplateRendererProps) {
   const Icon = TEMPLATE_ICONS[template.slug] || Target;
   const theme = TEMPLATE_THEMES[template.slug] || TEMPLATE_THEMES['general'];
   

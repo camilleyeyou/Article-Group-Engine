@@ -3,12 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import { 
-  ArrowLeft, Building2, FileText, Calendar, Tag, 
-  Clock, BookOpen, Sparkles, ExternalLink, ChevronRight,
-  Presentation, Code2, Rocket, Crown, Palette, Terminal,
-  Play, Quote
+  ArrowLeft, FileText, Clock, Sparkles, ChevronRight,
+  Presentation, Rocket, Crown, Palette, Terminal, Quote
 } from 'lucide-react';
 import type { Asset, AssetMetadata } from '@/types';
 
@@ -161,7 +158,7 @@ function DevRelAssetPage({ asset, metadata, readTime, paragraphs, router }: Asse
 
             <div className="pl-6">
               {asset.client && (
-                <div className="text-emerald-400 text-sm mb-2">// {asset.client}</div>
+                <div className="text-emerald-400 text-sm mb-2">{`// ${asset.client}`}</div>
               )}
               <h1 className="text-2xl md:text-4xl font-bold text-white mb-6 font-sans">
                 {asset.title}
@@ -186,7 +183,7 @@ function DevRelAssetPage({ asset, metadata, readTime, paragraphs, router }: Asse
         >
           {asset.description && (
             <div className="bg-[#161b22] border border-[#30363d] rounded-lg p-6 mb-8">
-              <code className="text-emerald-400 text-sm">/** @description */</code>
+              <code className="text-emerald-400 text-sm">{`/** @description */`}</code>
               <p className="text-gray-300 mt-2 font-sans">{asset.description}</p>
             </div>
           )}

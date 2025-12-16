@@ -154,7 +154,6 @@ export default function Home() {
                 template={response.template}
                 narrative={response.narrative}
                 assets={response.assets}
-                layout={response.layout}
                 query={currentQuery}
               />
 

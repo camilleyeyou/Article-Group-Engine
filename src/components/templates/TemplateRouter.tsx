@@ -1,7 +1,6 @@
 'use client';
-import Link from 'next/link';
 
-import type { Template, Asset, LayoutBlock } from '@/types';
+import type { Template, Asset } from '@/types';
 import { KeynoteTemplate } from './KeynoteTemplate';
 import { DevRelTemplate } from './DevRelTemplate';
 import { ProductLaunchTemplate } from './ProductLaunchTemplate';
@@ -13,11 +12,10 @@ interface TemplateRouterProps {
   template: Template;
   narrative: string;
   assets: Asset[];
-  layout: LayoutBlock[];
   query: string;
 }
 
-export function TemplateRouter({ template, narrative, assets, layout, query }: TemplateRouterProps) {
+export function TemplateRouter({ template, narrative, assets, query }: TemplateRouterProps) {
   // Route to specific template designs based on slug
   switch (template.slug) {
     case 'keynote-development':
