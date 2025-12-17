@@ -6,6 +6,11 @@ import { DevRelTemplate } from './DevRelTemplate';
 import { ProductLaunchTemplate } from './ProductLaunchTemplate';
 import { ExecutiveTemplate } from './ExecutiveTemplate';
 import { RebrandingTemplate } from './RebrandingTemplate';
+import { HardTechTemplate } from './HardTechTemplate';
+import { ConsumerTemplate } from './ConsumerTemplate';
+import { SalesTemplate } from './SalesTemplate';
+import { ThoughtLeadershipTemplate } from './ThoughtLeadershipTemplate';
+import { CrisisTemplate } from './CrisisTemplate';
 import { DefaultTemplate } from './DefaultTemplate';
 
 interface TemplateRouterProps {
@@ -25,9 +30,13 @@ export function TemplateRouter({ template, narrative, assets, query }: TemplateR
       return <DevRelTemplate query={query} narrative={narrative} assets={assets} />;
     
     case 'product-launch':
-    case 'hard-tech-launch':
-    case 'consumer-launch':
       return <ProductLaunchTemplate query={query} narrative={narrative} assets={assets} />;
+    
+    case 'hard-tech-launch':
+      return <HardTechTemplate query={query} narrative={narrative} assets={assets} />;
+    
+    case 'consumer-launch':
+      return <ConsumerTemplate query={query} narrative={narrative} assets={assets} />;
     
     case 'executive-messaging':
     case 'investor-communications':
@@ -38,7 +47,16 @@ export function TemplateRouter({ template, narrative, assets, query }: TemplateR
     case 'brand-design':
       return <RebrandingTemplate query={query} narrative={narrative} assets={assets} />;
     
-    // Use default template for others (we'll add more unique templates later)
+    case 'sales-enablement':
+      return <SalesTemplate query={query} narrative={narrative} assets={assets} />;
+    
+    case 'thought-leadership':
+      return <ThoughtLeadershipTemplate query={query} narrative={narrative} assets={assets} />;
+    
+    case 'crisis-communications':
+      return <CrisisTemplate query={query} narrative={narrative} assets={assets} />;
+    
+    // Use default template for remaining templates
     default:
       return (
         <DefaultTemplate 
