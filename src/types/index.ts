@@ -61,6 +61,7 @@ export interface Asset {
   metadata?: AssetMetadata;
   thumbnail_url?: string;
   source_url?: string;
+  pdf_url?: string;
   vimeo_id?: string;
   created_at: string;
   updated_at: string;

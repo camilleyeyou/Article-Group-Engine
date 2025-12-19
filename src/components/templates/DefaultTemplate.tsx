@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { useRef, useMemo, useEffect, useState } from 'react';
 import { 
   ArrowRight, Sparkles, BookOpen, Briefcase, ChevronDown, 
-  Quote, Star, Zap, Play, ArrowUpRight, 
+  Quote, Star, Zap, Target, Play, ArrowUpRight, 
   CheckCircle, Users, TrendingUp, Award
 } from 'lucide-react';
 import type { Asset, Template } from '@/types';
