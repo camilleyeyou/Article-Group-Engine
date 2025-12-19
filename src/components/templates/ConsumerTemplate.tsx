@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Heart, ArrowRight, Star, Sparkles, Smile, Camera, Music, Coffee } from 'lucide-react';
+import { Heart, ArrowRight, Star, Sparkles, Camera, Music, Coffee } from 'lucide-react';
 import type { Asset } from '@/types';
 
 interface ConsumerTemplateProps {

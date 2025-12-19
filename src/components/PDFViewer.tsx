@@ -6,8 +6,6 @@ import {
   Download, 
   ZoomIn, 
   ZoomOut, 
-  ChevronLeft, 
-  ChevronRight, 
   Maximize2,
   X,
   FileText,

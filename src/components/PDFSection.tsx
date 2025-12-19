@@ -17,7 +17,6 @@ interface PDFSectionProps {
 export function PDFSection({ pdfUrl, title, accentColor = 'indigo', className = '' }: PDFSectionProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [zoom, setZoom] = useState(100);
-  const [viewMode, setViewMode] = useState<'preview' | 'text'>('preview');
 
   const handleDownload = () => {
     const link = document.createElement('a');

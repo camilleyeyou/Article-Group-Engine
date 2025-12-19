@@ -2,13 +2,13 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   ArrowLeft, FileText, Download, Maximize2, Minimize2,
-  ZoomIn, ZoomOut, ExternalLink, X, ChevronLeft, ChevronRight,
-  Sparkles, Eye, Share2, Printer, RotateCw
+  ZoomIn, ZoomOut, ExternalLink, X,
+  Share2, Printer
 } from 'lucide-react';
-import type { Asset, AssetMetadata } from '@/types';
+import type { Asset } from '@/types';
 
 // ============================================
 // IMMERSIVE PDF VIEWER
@@ -56,7 +56,7 @@ function ImmersivePDFViewer({ pdfUrl, title, client, onBack }: ImmersivePDFViewe
           text: `Check out: ${title}`,
           url: window.location.href,
         });
-      } catch (err) {
+      } catch {
         // User cancelled or error
       }
     } else {
