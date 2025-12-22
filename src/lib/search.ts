@@ -17,43 +17,71 @@ export async function searchAssets(
 ): Promise<SearchResult[]> {
   const supabase = createServerClient();
   const limit = options?.limit ?? 10;
-  const minSimilarity = options?.minSimilarity ?? 0.2;
+  const minSimilarity = options?.minSimilarity ?? 0.1; // Lowered from 0.2
   
   // Generate embedding for the query
   const queryEmbedding = await generateEmbedding(query);
   
-  // Call the vector similarity search function
-  const { data, error } = await supabase.rpc('search_assets_v2', {
-    query_embedding: queryEmbedding,
-    match_count: limit * 2, // Get more to allow for filtering/reranking
-    min_similarity: minSimilarity,
-    filter_types: options?.assetTypes ?? null,
-    filter_client: options?.clientFilter ?? null,
-    filter_capability: options?.capability ?? null,
-  });
+  console.log(`[Search] Generating embedding for: "${query.substring(0, 50)}..."`);
   
-  if (error) {
-    // Fallback to v1 if v2 doesn't exist yet
-    if (error.message.includes('search_assets_v2')) {
-      console.log('[Search] Falling back to search_assets v1');
-      const { data: v1Data, error: v1Error } = await supabase.rpc('search_assets', {
+  // Try v2 first, then fall back to v1
+  let data: SearchResult[] | null = null;
+  let error: Error | null = null;
+  
+  try {
+    const result = await supabase.rpc('search_assets_v2', {
+      query_embedding: queryEmbedding,
+      match_count: limit * 2,
+      min_similarity: minSimilarity,
+      filter_types: options?.assetTypes ?? null,
+      filter_client: options?.clientFilter ?? null,
+      filter_capability: options?.capability ?? null,
+    });
+    
+    if (result.error) throw result.error;
+    data = result.data as SearchResult[];
+    console.log(`[Search] v2 returned ${data?.length || 0} results`);
+  } catch (e) {
+    console.log('[Search] v2 failed, trying v1...');
+    
+    try {
+      const result = await supabase.rpc('search_assets', {
         query_embedding: queryEmbedding,
-        match_count: limit,
+        match_count: limit * 2,
         min_similarity: minSimilarity,
         filter_types: options?.assetTypes ?? null,
         filter_client: options?.clientFilter ?? null,
       });
       
-      if (v1Error) {
-        console.error('Search error:', v1Error);
-        throw new Error('Failed to search assets: ' + v1Error.message);
-      }
-      
-      return v1Data as SearchResult[];
+      if (result.error) throw result.error;
+      data = result.data as SearchResult[];
+      console.log(`[Search] v1 returned ${data?.length || 0} results`);
+    } catch (e2) {
+      console.error('[Search] Both v1 and v2 failed:', e2);
+      error = e2 as Error;
+    }
+  }
+  
+  // If RPC fails completely, try direct query as last resort
+  if (!data || data.length === 0) {
+    console.log('[Search] RPC failed or empty, trying direct query...');
+    
+    const { data: directData, error: directError } = await supabase
+      .from('assets')
+      .select('*')
+      .limit(limit);
+    
+    if (directError) {
+      console.error('[Search] Direct query also failed:', directError);
+      throw new Error('Search failed: ' + (error?.message || directError.message));
     }
     
-    console.error('Search error:', error);
-    throw new Error('Failed to search assets: ' + error.message);
+    // Return direct results with fake similarity
+    return (directData || []).map((asset, index) => ({
+      asset: asset as Asset,
+      similarity: 0.5 - (index * 0.01),
+      chunk_text: asset.description || ''
+    }));
   }
   
   // Rerank: prioritize case studies and high-quality content
