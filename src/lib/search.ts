@@ -144,10 +144,11 @@ export async function getPinnedAssets(query: string): Promise<Asset[]> {
 }
 
 /**
- * Detect capability from query - SIMPLIFIED
+ * Detect capability from query - DISABLED (was causing 0 results)
  */
-export function detectCapability(query: string): BusinessCapability | null {
-  // Disabled - capability filtering was causing 0 results
+export function detectCapability(_query: string): BusinessCapability | null {
+  // Capability filtering was causing search_assets_v2 to return 0 results
+  // because assets don't have primary_capability metadata set
   return null;
 }
 
